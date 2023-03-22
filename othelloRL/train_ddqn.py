@@ -51,6 +51,14 @@ class DQN(nn.Module):
         
         return
 
+    def init_last_linear(self):
+        nn.init.xavier_uniform_(self.layers2[-1].weight)
+        nn.init.constant_(self.layers2[-1].bias, 0.01)
+        
+        nn.init.xavier_uniform_(self.layers1[0].weight)
+        nn.init.constant_(self.layers1[0].bias, 0.01)
+        return
+
     def forward(self, x:torch.Tensor):
         
         assert len(x.shape) == 3
@@ -193,6 +201,7 @@ class DDQN_Learner(Agent):
         
         sum_reward = 0.0
         
+        
         learner_scores = []
         opponent_scores = []
         
@@ -201,6 +210,8 @@ class DDQN_Learner(Agent):
         rewards = []
         
         loss_history = []
+        
+        best_agent = (0, -np.inf) # (episode, average_win_rate)
 
         for episode in range(episodes):
             state = self.env.reset(player=1)
@@ -285,13 +296,27 @@ class DDQN_Learner(Agent):
                 plt.savefig(f'./ddqn_loss.png')
                 plt.close()
             
-            if episode % 500 == 0: # 1000エピソードごとに勝率を計算
-                win_rate.append(self.evaluate_agent())
+            if episode % 500 == 0: # 500エピソードごとに勝率を計算
+                win_rate.append(self.evaluate_agent(200))
                 xasix = np.arange(0,episode+1,500)
                 plt.plot(xasix,win_rate, label='win_rate')
                 plt.legend()
                 plt.savefig(f'./ddqn_win_rate.png')
                 plt.close()
+                
+                # 最高のエージェントを保存
+                if win_rate[-1] > best_agent[1]:
+                    best_agent = (episode, win_rate[-1])
+                    
+                    torch.save(self.model.state_dict(), 'ddqn_best_weights.pth')
+                    
+                    print ("best agent is updated")
+                    print (f"episode:{best_agent[0]}, win_rate:{best_agent[1]}")
+            
+            if episode % 2000 == 0: # 2000エピソードごとにlast layerを初期化
+                
+                self.model.init_last_linear()
+                self.update_target_model()
             
             
 
