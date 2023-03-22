@@ -7,6 +7,7 @@ from torch.autograd import Variable
 from collections import deque
 from othelloenv import OthelloEnv
 from agent import Agent,RandomAgent
+from train_ddqn import DQN,DDQN_Learner
 from env_wrapper import WrappedEnv
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -71,7 +72,7 @@ class DQN(nn.Module):
         
         h = self.layers1(x)
         
-        x = h + x
+        x = h 
         
         x = self.layers2(x)
         
@@ -80,13 +81,14 @@ class DQN(nn.Module):
         x = x - x.mean(dim=1,keepdim=True)
         return x
 
+
 class DDQN_Learner(Agent):
     def __init__(self, env : WrappedEnv):
         self.env = env
         self.gamma = 0.99
 
-        self.batch_size = 15096
-        self.memory = deque(maxlen=40000) #  (state, action, reward, next_state, done)
+        self.batch_size = 128
+        self.memory = deque(maxlen=400000) #  (state, action, reward, next_state, done)
         
         self.input_dim = 8 * 8
         self.num_actions = 8 * 8
@@ -94,7 +96,7 @@ class DDQN_Learner(Agent):
         self.model = DQN(self.input_dim, self.num_actions)
         self.target_model = DQN(self.input_dim, self.num_actions)
         
-        self.optimizer = optim.Adam(self.model.parameters(), lr=0.00001,weight_decay=0.01)
+        self.optimizer = optim.Adam(self.model.parameters(), lr=0.000001,weight_decay=0.01)
 
         self.update_target_model()
 
@@ -103,7 +105,7 @@ class DDQN_Learner(Agent):
         self.target_model.to(self.device)
         
         self.epsilon = 1.0
-        self.epsilon_decay = 0.9994
+        self.epsilon_decay = 0.9999
         self.epsilon_min = 0.01
         
         
@@ -240,6 +242,7 @@ class DDQN_Learner(Agent):
                     opponent_scores.append(self.env.scores[2])
                     rewards.append(reward)
                     print("Episode: {}/{}, Steps: {}, Epsilon: {:.5}".format(episode + 1, episodes, steps, self.epsilon))
+                    print ("best agent",best_agent)
 
             loss = self.replay()
             loss_history.append(loss)
@@ -289,8 +292,8 @@ class DDQN_Learner(Agent):
                 plt.savefig(f'./ddqn_rewards.png')
                 plt.close()
                 
-                # lossも移動平均をとる
-                loss_ma = pd.Series(loss_history).rolling(100).mean()
+                # loss
+                loss_ma = pd.Series(loss_history).rolling(1).mean()
                 plt.plot(loss_ma, label='loss')
                 plt.legend()
                 plt.savefig(f'./ddqn_loss.png')
@@ -313,7 +316,7 @@ class DDQN_Learner(Agent):
                     print ("best agent is updated")
                     print (f"episode:{best_agent[0]}, win_rate:{best_agent[1]}")
             
-            if episode % 2000 == 0: # 2000エピソードごとにlast layerを初期化
+            if episode % 3000 == 0: # 2000エピソードごとにlast layerを初期化
                 
                 self.model.init_last_linear()
                 self.update_target_model()
@@ -344,9 +347,15 @@ class DDQN_Learner(Agent):
         
         return numwin / n_game
 
+    def load_weights(self, path):
+        self.model.load_state_dict(torch.load(path))
+        self.update_target_model()
+        return
+
 if __name__ == "__main__":
     env = OthelloEnv()
     opponent_agent = RandomAgent(env)
+    opponent_agent = DDQN_Learner()
     wrapped_env = WrappedEnv(env, opponent_agent)
     agent = DDQN_Learner(wrapped_env)
     agent.train(1000000)
