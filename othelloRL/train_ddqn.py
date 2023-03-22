@@ -7,7 +7,6 @@ from torch.autograd import Variable
 from collections import deque
 from othelloenv import OthelloEnv
 from agent import Agent,RandomAgent
-from train_ddqn import DQN,DDQN_Learner
 from env_wrapper import WrappedEnv
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -355,7 +354,6 @@ class DDQN_Learner(Agent):
 if __name__ == "__main__":
     env = OthelloEnv()
     opponent_agent = RandomAgent(env)
-    opponent_agent = DDQN_Learner()
     wrapped_env = WrappedEnv(env, opponent_agent)
     agent = DDQN_Learner(wrapped_env)
     agent.train(1000000)

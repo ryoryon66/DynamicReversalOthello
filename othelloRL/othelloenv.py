@@ -104,6 +104,7 @@ class OthelloEnv:
 
     def flip_discs_in_direction(self, x, y, dx, dy):
         nx, ny = x + dx, y + dy
+        cnt = 0
         while 0 <= nx < self.board_size and 0 <= ny < self.board_size:
             if self.board[nx, ny] == self.player:
                 break
@@ -111,7 +112,10 @@ class OthelloEnv:
                 self.board[nx, ny] = self.player
                 nx, ny = nx + dx, ny + dy
                 
-                self.scores[self.player] += 1
+                cnt += 1
+        
+        self.scores[self.player] += cnt ** 2
+        # self.scores[self.player] += cnt ** 1
             
         
 
