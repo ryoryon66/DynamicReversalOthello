@@ -2,8 +2,8 @@ import tkinter as tk
 from webbrowser import Opera
 from PIL import Image, ImageTk
 import numpy as np
-from othelloenv import OthelloEnv
-from agent import DDQN_Agent
+from othelloRL.othelloenv import OthelloEnv
+from othelloRL.agent import DDQN_Agent
 import tkinter.messagebox
 import colorsys
 
@@ -19,7 +19,7 @@ import time
 
 from enum import Enum
 
-weight_path = "/home/ryoryon66/work/othello/ddqn_best_weights.pth"
+weight_path = ""
 
 TIME = 5.0
 

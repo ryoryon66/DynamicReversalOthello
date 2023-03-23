@@ -1,5 +1,5 @@
-from othelloenv import OthelloEnv
-from agent import Agent
+from .othelloenv import OthelloEnv
+from .agent import Agent
 
 class WrappedEnv():
     

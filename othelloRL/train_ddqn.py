@@ -5,9 +5,9 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from collections import deque
-from othelloenv import OthelloEnv
-from agent import Agent,RandomAgent
-from env_wrapper import WrappedEnv
+from .othelloenv import OthelloEnv
+from .agent import Agent,RandomAgent
+from .env_wrapper import WrappedEnv
 import matplotlib.pyplot as plt
 import pandas as pd
 

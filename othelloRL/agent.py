@@ -1,4 +1,4 @@
-from othelloenv import OthelloEnv
+from .othelloenv import OthelloEnv
 from abc import ABC, abstractmethod
 
 import random
@@ -12,7 +12,7 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from collections import deque
-from othelloenv import OthelloEnv
+
 
 
 
