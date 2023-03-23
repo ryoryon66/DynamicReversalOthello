@@ -4,6 +4,7 @@ from PIL import Image, ImageTk
 import numpy as np
 from othelloRL.othelloenv import OthelloEnv
 from othelloRL.agent import DDQN_Agent
+from othelloRL import settings
 import tkinter.messagebox
 import colorsys
 
@@ -17,11 +18,13 @@ from collections import deque
 import threading
 import time
 
+
+
 from enum import Enum
 
-weight_path = ""
+weight_path = settings.model_path
 
-TIME = 5.0
+TIME = settings.THINKING_TIME
 
 class Operator(Enum):
     CPU = 1

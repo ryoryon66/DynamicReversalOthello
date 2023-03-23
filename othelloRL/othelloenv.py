@@ -1,4 +1,5 @@
 import numpy as np
+from  .settings import SCORE_CALCULATION
 
 class OthelloEnv:
     def __init__(self, board_size=8):
@@ -114,8 +115,12 @@ class OthelloEnv:
                 
                 cnt += 1
         
-        self.scores[self.player] += cnt ** 2
-        # self.scores[self.player] += cnt ** 1
+        if SCORE_CALCULATION == "pow1" :
+            self.scores[self.player] += cnt ** 1
+        elif SCORE_CALCULATION == "pow2" :
+            self.scores[self.player] += cnt ** 2
+        else :
+            raise ValueError("settings.SCORE_CALCULATION is not correct")
             
         
 
