@@ -38,6 +38,8 @@ class RandomAgent():
         valid_actions = self.env.get_valid_actions()
         return random.choice(valid_actions)
     
+    
+
 
 
 

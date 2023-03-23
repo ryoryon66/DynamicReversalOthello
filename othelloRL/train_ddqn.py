@@ -84,7 +84,7 @@ class DQN(nn.Module):
 class DDQN_Learner(Agent):
     def __init__(self, env : WrappedEnv):
         self.env = env
-        self.gamma = 0.99
+        self.gamma = 0.999999
 
         self.batch_size = 128
         self.memory = deque(maxlen=400000) #  (state, action, reward, next_state, done)

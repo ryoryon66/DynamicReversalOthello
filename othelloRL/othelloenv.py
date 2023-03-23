@@ -157,6 +157,41 @@ class OthelloEnv:
             print()
         print()
 
+    def is_game_over(self) -> int:
+        
+        player = self.player
+        
+        finished = False
+        
+        if len(self.get_valid_actions()) == 0:
+            self.player = 3 - self.player
+            # Check if opponent can move or not
+            if len(self.get_valid_actions()) == 0:
+                finished = True
+            else:
+                finished = False
+        
+        self.player = player
+        
+        return finished
+    
+    def get_winner(self) -> int:
+        
+        player = self.player
+        
+        assert self.is_game_over(),"game is not over"
+        
+        if self.scores[1] > self.scores[2]:
+            winner = 1
+        elif self.scores[1] < self.scores[2]:
+            winner = 2
+        else:
+            winner = 0
+        
+        return winner
+        
+
+
 
 import random
 
