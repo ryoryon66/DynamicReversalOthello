@@ -35,3 +35,7 @@ pip install torch
 CPUプレイヤーは、DDQN（Deep Double Q-Network）エージェントを使用しています。エージェントは、学習済みの重みファイルを使用しています.
 使用する重みファイルも設定ファイル(othelloRL/settings.py)から設定できます。
 
+experiment2/ddqn_best_weights.pthのランダムエージェ
+ントに対する勝率はおよそ85%
+pow2_experiment2/ddqn_best_weights.pthのランダムエージェントに対する勝率はおよそ91.5%
+
