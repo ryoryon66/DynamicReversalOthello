@@ -11,6 +11,13 @@ DynamicReversalOthelloは、Pythonを使用した古典的なボードゲーム�
 
 
 # 使い方
+
+```
+git clone git@github.com:ryoryon66/DynamicReversalOthello.git
+```
+
+
+
 以下の手順でプログラムを実行します。
 
 必要なライブラリをインストールします。
