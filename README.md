@@ -1,4 +1,4 @@
-
+松尾研の「スプリングセミナー2023 深層強化学習」での成果物。優秀賞受賞。
 # DynamicReversalOthello
 DynamicReversalOthelloは、Pythonを使用した古典的なボードゲーム「オセロ」（別名：リバーシ）の変則バージョンの実装です。tkinterライブラリを使用しています。
 
